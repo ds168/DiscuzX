@@ -1,0 +1,121 @@
+<!--{template common/header}-->
+<!--{if empty($_GET['showratetip'])}-->
+<!--{if $_GET['action'] == 'rate'}-->
+<div class="tip loginbox loginpop p5" id="floatlayout_topicadmin">
+	<form id="rateform" method="post" autocomplete="off" action="forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="tid" value="{$_G['tid']}" />
+		<input type="hidden" name="pid" value="{$_GET['pid']}" />
+		<input type="hidden" name="referer" value="{$referer}" />
+		<input type="hidden" name="handlekey" value="rate">
+		<h2 class="log_tit" id="return_rate"><a href="javascript:;" onclick="popup.close();"><span class="icon_close y">&nbsp;</span></a>{lang rate}</h2>
+		<ul class="post_box cl">
+			<!--{eval $rateselfflag = 0;}-->
+			<!--{loop $ratelist $id $options}-->
+			<li class="flex-box mli">
+				<div class="flex tit">{$_G['setting']['extcredits'][$id]['img']} {$_G['setting']['extcredits'][$id]['title']}</div>
+				<div class="flex"><input type="text" name="score{$id}" id="score{$id}" value="0" for="rate{$id}_change" class="input show" style="padding:4px 0;" /></div>
+				<div class="flex y">
+					<div class="login_select inner b_ok">
+						<span class="inner">&nbsp;<i class="dm-c-down f_d" style="float:none;"></i>&nbsp;</span>
+						<select class="select_change" id="rate{$id}"><option>0</option>{echo str_replace(array('<li>','</li>'), array('<option>','</option>'), $options)}</select>
+					</div>
+				</div>
+			</li>
+			<!--{/loop}-->			
+			<li class="flex-box mli">
+				<div class="flex tit">{lang reason}</div>
+				<div class="flex"><input type="text" name="reason" id="reason" for="reason_change" placeholder="{lang user_operation_explain}" class="input show" style="padding:4px 0;" /></div>
+				<div class="flex y">
+					<div class="login_select inner b_ok">
+						<span class="inner">&nbsp;<i class="dm-c-down f_d" style="float:none;"></i>&nbsp;</span>
+						<!--{eval $selectreason = modreasonselect(1, 'userreasons')}-->
+						<!--{if $selectreason}-->
+							<select class="select_change" id="reason"><option value=""></option>$selectreason</select>
+						<!--{/if}-->
+					</div>
+				</div>
+			</li>
+			<label for="sendreasonpm">
+			<li class="flex-box">
+				<div class="flex tit">{lang admin_pm}</div>
+				<div class="flex"></div>
+				<div class="flex y">
+					<input type="checkbox" name="sendreasonpm" id="sendreasonpm" {if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} class="checkbox_key" />
+					<code class="checkbox checkbox_close"></code>
+				</div>
+			</li>
+			</label>
+		</ul>
+		<script>
+			$(document).on('change', '.select_change', function(){
+				$('[for="' + $(this).attr('id')+'_change"]').val($(this).find('option:selected').val());
+			});
+		</script>
+		<button name="ratesubmit" type="submit" value="true" class="pn pnc formdialog"><span>{lang confirms}</span></button>
+	</form>
+</div>
+<!--{elseif $_GET['action'] == 'removerate'}-->
+<div class="tip loginbox loginpop p5" id="floatlayout_topicadmin">
+	<form id="rateform" method="post" autocomplete="off" action="forum.php?mod=misc&action=removerate&ratesubmit=yes&infloat=yes&inajax=1">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="tid" value="$_G['tid']">
+		<input type="hidden" name="pid" value="$_GET['pid']">
+		<input type="hidden" name="referer" value="$referer" />
+		<input type="hidden" name="handlekey" value="rate">
+		<h2 class="log_tit" id="return_rate"><a href="javascript:;" onclick="popup.close();"><span class="icon_close y">&nbsp;</span></a>{lang thread_removerate}</h2>
+		<ul class="post_box cl" style="max-height:200px; overflow-y:auto;">
+			<li class="flex-box mli">
+				<div class="flex">&nbsp;</div>
+				<div class="flex-2 xs1 xg1"><span class="z">{lang username}</span></div>
+				<div class="flex-2 xs1 xg1">{lang credits}</div>
+				<div class="flex-3 xs1 xg1"><span class="y">{lang time}</span></div>
+			</li>
+			<!--{loop $ratelogs $ratelog}-->
+			<li class="flex-box mli">
+				<div class="flex"><input type="checkbox" name="logidarray[]" value="$ratelog['uid'] $ratelog['extcredits'] $ratelog['dbdateline']" /></div>
+				<div class="flex-2 xs1 xg1"><span class="z"><a href="home.php?mod=space&uid=$ratelog['uid']">$ratelog['username']</a></span></div>
+				<div class="flex-2 xs1 xg1">{$_G['setting']['extcredits'][$ratelog['extcredits']]['title']} <span class="xi1">$ratelog['scoreview']</span> {$_G['setting']['extcredits'][$ratelog[extcredits]][unit]}</div>
+				<div class="flex-3 xs1 xg1"><span class="y">$ratelog['dateline']</span></div>
+			</li>
+			<!--{if $ratelog['reason']}-->
+			<li class="flex-box mli">
+				<div class="flex xs1 xg1"><span class="z">$ratelog['reason']</span></div>
+			</li>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</ul>
+		<ul class="post_box cl">
+			<li class="flex-box mli">
+				<div class="flex">
+				<input name="reason" class="input px pxbg b_a pl5" placeholder="{lang admin_operation_explain}" />
+				</div>
+			</li>
+			<label for="sendreasonpm">
+			<li class="flex-box">
+				<div class="flex tit">{lang admin_pm}</div>
+				<div class="flex"></div>
+				<div class="flex y">
+					<input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} class="checkbox_key" />
+					<code class="checkbox checkbox_close"></code>
+				</div>
+			</li>
+			</label>
+		</ul>
+		<button class="pn pnc vm formdialog" type="submit" value="true" name="ratesubmit"><span>{lang submit}</span></button>
+	</form>
+</div>
+<!--{/if}-->
+<!--{else}-->
+<div class="tip loginbox loginpop p5" id="floatlayout_topicadmin">
+	<h2 class="log_tit" id="return_rate"><a href="javascript:;" onclick="popup.close();"><span class="icon_close y">&nbsp;</span></a>{lang board_message}</h2>
+		<div class="alert_right">
+			<p>{lang push_succeed}</p>
+			<p class="alert_btnleft">
+				<a href="javascript:;" class="xi1 dialog">{lang click_here}</a> {lang rate_thread}
+			</p>
+		</div>
+	<button onclick="popup.close();" id="closebtn" class="pn pnc" type="button" fwin="rate"><strong>{lang close}</strong></button>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->

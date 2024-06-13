@@ -1,0 +1,53 @@
+<div id="postmessage_$post['pid']" class="postmessage">$post['message']</div>
+<div class="debate mt10 cl">
+<!--{if $debate['umpire']}-->
+	<!--{if $debate['umpirepoint']}-->
+		<div class="debate_box cl">
+			<p>
+				<!--{if $debate['winner']}-->
+				<!--{if $debate['winner'] == 1}-->
+				<strong>{lang debate_square}{lang debate_winner}</strong>
+				<!--{elseif $debate['winner'] == 2}-->
+				<strong>{lang debate_opponent}{lang debate_winner}</strong>
+				<!--{else}-->
+				<strong>{lang debate_draw}</strong>
+				<!--{/if}-->
+				<!--{/if}-->
+			</p>
+			<p>{lang debate_comment_dateline}: $debate['endtime']</p>
+			<!--{if $debate['umpirepoint']}--><p>{lang debate_umpirepoint}: $debate['umpirepoint']</p><!--{/if}-->
+			<!--{if $debate['bestdebater']}--><p>{lang debate_bestdebater}: $debate['bestdebater']</p><!--{/if}-->
+		</div>
+	<!--{/if}-->
+<!--{/if}-->
+	<div class="debate_box cl">
+		<strong>{lang debate_square_point} ($debate['affirmvotes'])<em>{lang debater}: $debate['affirmdebaters']</em></strong>
+		<p>$debate['affirmpoint']</p>
+		<!--{if !$_G['forum_thread']['is_archived']}-->
+		<dd class="flex-box cl">
+			<div class="flex cl"><a href="forum.php?mod=misc&action=debatevote&tid=$_G['tid']&stand=1" id="affirmbutton" class="dialog pns">{lang debate_support}</a></div>
+			<div class="flex cl"><a href="forum.php?mod=post&action=reply&fid=$_G['fid']&tid=$_G['tid']&stand=1{if $_GET['from']}&from=$_GET['from']{/if}" class="pns y" style="float: right;">{lang debate_join}</a></div>
+		</dd>
+		<!--{/if}-->
+	</div>
+	<div class="debate_box cl">
+		<strong>{lang debate_opponent_point} ($debate['negavotes'])<em>{lang debater}: $debate['negadebaters']</em></strong>
+		<p>$debate['negapoint']</p>
+		<!--{if !$_G['forum_thread']['is_archived']}-->
+		<dd class="flex-box cl">
+			<div class="flex cl"><a href="forum.php?mod=misc&action=debatevote&tid=$_G['tid']&stand=2" id="negabutton" class="dialog pns">{lang debate_support}</a></div>
+			<div class="flex cl"><a href="forum.php?mod=post&action=reply&fid=$_G['fid']&tid=$_G['tid']&stand=2{if $_GET['from']}&from=$_GET['from']{/if}" class="pns y" style="float: right;">{lang debate_join}</a></div>
+		</dd>
+		<!--{/if}-->
+	</div>
+	<!--{if $debate['endtime']}-->
+		<div class="endtime">{lang endtime}: $debate['endtime'] <!--{if $debate['umpire']}-->{lang debate_umpire}: $debate['umpire']<!--{/if}--></div>
+	<!--{/if}-->
+	<!--{if $debate['umpire'] && $_G['username'] && $debate['umpire'] == $_G['member']['username']}-->
+		<!--{if $debate['remaintime'] && !$debate['umpirepoint']}-->
+		 <button type="button" class="pn dialog" href="forum.php?mod=misc&action=debateumpire&tid=$_G['tid']&pid=$post['pid']{if $_GET['from']}&from=$_GET['from']{/if}"><span>{lang debate_umpire_end}</span></button>
+		<!--{elseif TIMESTAMP - $debate['dbendtime'] < 3600}-->
+		 <button type="button" class="pn dialog" href="forum.php?mod=misc&action=debateumpire&tid=$_G['tid']&pid=$post['pid']{if $_GET['from']}&from=$_GET['from']{/if}"><span>{lang debate_umpirepoint_edit}</span></button>
+		<!--{/if}-->
+	<!--{/if}-->
+</div>
