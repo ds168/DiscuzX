@@ -275,13 +275,6 @@ if($isfounder) {
 	$menu['uc'] = array();
 }
 
-if($isfounder || $_G['adminid'] == 1) {
-	$topmenu['cloudaddons'] = '';
-	$menu['cloudaddons'] = array(
-		array('menu_addons', 'cloudaddons&frame=no', '_blank'),
-	);
-}
-
 if(!isfounder() && !isset($GLOBALS['admincp']->perms['all'])) {
 	$menunew = $menu;
 	foreach($menu as $topkey => $datas) {

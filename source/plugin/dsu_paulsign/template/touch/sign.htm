@@ -1,0 +1,67 @@
+<!--{subtemplate mobile/common/header}-->
+<div class="box">
+	<a href="./forum.php?mobile=yes" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em> &gt; </em><a href="plugin.php?id=dsu_paulsign:sign&mobile=yes">{lang dsu_paulsign:name}</a>
+</div>
+<div id="ct" class="wp">
+	<div class="vt">
+		<div class="bm mtn">
+			<!--{if $qiandaodb['time'] < $tdtime}-->
+				<div class="bm_h">
+					{lang dsu_paulsign:wap_01}<!--{if $var['ftopen']}--><br><font color="red">[{lang dsu_paulsign:mb_xz1}]</font><!--{/if}-->
+				</div>
+				<div class="bm_c">
+					<form name="qiandao" method="post" action="plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=0&inajax=0&mobile=yes">
+						<input type="hidden" name="formhash" value="{FORMHASH}">
+						<label for="mind"><strong>{lang dsu_paulsign:wap_02}</strong></label>
+						<select name="qdxq">
+							<!--{loop $emots $key $value}-->
+								<option value="{$key}">{$value['name']}</option>
+							<!--{/loop}-->
+						</select>
+						<br>
+						<!--{if !$var['sayclose']}-->
+							<label for="mode"><strong>{lang dsu_paulsign:mb_mode1}</strong></label>
+							<label><input type="radio" name="qdmode" value="1" checked="checked" onclick="if(checked == true){document.getElementById('mode1').style.display='';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:mb_mode2}</label>&nbsp;&nbsp;
+							<!--{if $var['ksopen']}--><label><input type="radio" name="qdmode" value="2" onclick="if(checked == true){document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='';}">&nbsp;{lang dsu_paulsign:mb_mode3}</label>&nbsp;&nbsp;<!--{/if}-->
+							<!--{if $var['todaysayxt']}--><label><input type="radio" name="qdmode" value="3" onclick="if(checked){document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:noq}</label><!--{/if}-->
+							<div id="mode1" style="display:;">
+								<label for="zxs"><strong>{lang dsu_paulsign:mb_zxs}</strong></label>
+								<input type="text" name="todaysay" id="todaysay" class="txt" />
+								<span class="xg2">{lang dsu_paulsign:mb_xzzs}</span>
+							</div>
+							<div id="mode2" style="display:none;">
+								<label for="fastreply"><strong>{lang dsu_paulsign:mb_fastreply}</strong></label>
+								<select name="fastreply">
+									<!--{loop $fastreplytexts $key $value}-->
+										<option value="{$key}" style="color:#{eval echo dechex(rand(0, 255)).dechex(rand(0,196)).dechex(rand(0,255));}">{$value}</option>
+									<!--{/loop}-->
+								</select>
+							</div>
+						<!--{/if}-->
+						<div class="inbox">
+							<input type="submit" value="{lang dsu_paulsign:encore_02}">
+						</div>
+					</form>
+				</div>
+			<!--{else}-->
+				<div class="bm_h">{lang dsu_paulsign:mb_jryqe}</div><br>
+			<!--{/if}-->
+		</div>
+		<div class="bm">
+			<div class="bm_h">{lang dsu_paulsign:mb_fwt}</div>
+			<div class="bm_c add">
+				<!--{if $qiandaodb}-->
+					<p><font color=#FF0000><b>$_G['username']</b></font> {lang dsu_paulsign:mb_fwt1} <b>$qiandaodb['days']</b> {lang dsu_paulsign:mb_fwt2}</p>
+					<p>{lang dsu_paulsign:mb_fwt3}<b>$qiandaodb['mdays']</b> {lang dsu_paulsign:mb_fwt2}</p>
+					<p>{lang dsu_paulsign:mb_fwt4}$q['if']{lang dsu_paulsign:mb_fwt5}</p>
+					<p>{lang dsu_paulsign:mb_fwt6}<font color=#ff00cc>$qtime</font> </p>
+					<p>{lang dsu_paulsign:mb_fwt8}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color=#ff00cc><b>$qiandaodb['reward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}{lang dsu_paulsign:mb_fwt9}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color=#ff00cc><b>$qiandaodb['lastreward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}.</p>
+					<p>{$q['level']}</p>
+				<!--{else}-->
+					<p>{lang dsu_paulsign:mb_fwt7}</p>
+				<!--{/if}-->
+			</div>
+		</div>
+	</div>
+</div>
+<!--{subtemplate mobile/common/footer}-->

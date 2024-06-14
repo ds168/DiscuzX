@@ -82,14 +82,16 @@ function cloudaddons_check() {
 }
 
 function cloudaddons_open($extra, $post = '', $timeout = 15) {
+	return;
 	return dfsockopen(cloudaddons_url('&from=s').$extra, 0, $post, '', false, CLOUDADDONS_DOWNLOAD_IP, $timeout);
 }
 
-function cloudaddons_pluginlogo_url($id, $type = 'plugin') {
-	return CLOUDADDONS_WEBSITE_URL.'?_'.$id.'&type='.$type;
+function cloudaddons_pluginlogo_url($id) {
+	return ADMINSCRIPT.'?action=plugins&operation=pluginlogo&id='.$id;
 }
 
 function cloudaddons_installlog($addonid) {
+	return;
 	$array = cloudaddons_getmd5($addonid);
 	if($array['RevisionID']) {
 		cloudaddons_open('&mod=app&ac=installlog&rid='.$array['RevisionID']);
@@ -97,6 +99,7 @@ function cloudaddons_installlog($addonid) {
 }
 
 function cloudaddons_downloadlog($addonid) {
+	return;
 	$array = cloudaddons_getmd5($addonid);
 	if($array['RevisionID']) {
 		cloudaddons_open('&mod=app&ac=downloadlog&rid='.$array['RevisionID']);
@@ -104,17 +107,20 @@ function cloudaddons_downloadlog($addonid) {
 }
 
 function cloudaddons_faillog($rid, $type) {
+	return;
 	$rid = intval($rid);
 	$type = intval($type);
 	cloudaddons_open('&mod=app&ac=faillog&rid='.$rid.'&type='.$type.'&serverinfo='.urlencode($_SERVER['SERVER_SOFTWARE']));
 }
 
 function cloudaddons_removelog($rid) {
+	return;
 	global $_G;
 	cloudaddons_open('&mod=app&ac=removelog&rid='.$rid);
 }
 
 function cloudaddons_validator($addonid) {
+	return;
 	$array = cloudaddons_getmd5($addonid);
 	if(cloudaddons_open('&mod=app&ac=validator&ver=2&addonid='.$addonid.($array !== false ? '&rid='.$array['RevisionID'].'&sn='.$array['SN'].'&rd='.$array['RevisionDateline'] : '')) === '0') {
 		cpmsg('cloudaddons_genuine_message', '', 'error', array('addonid' => $addonid));
@@ -122,6 +128,7 @@ function cloudaddons_validator($addonid) {
 }
 
 function cloudaddons_upgradecheck($addonids) {
+	return;
 	$post = array();
 	foreach($addonids as $addonid) {
 		$array = cloudaddons_getmd5($addonid);
@@ -133,6 +140,7 @@ function cloudaddons_upgradecheck($addonids) {
 }
 
 function cloudaddons_recommendaddon($addonids) {
+	return;
 	$post = array();
 	foreach($addonids as $addonid) {
 		$array = cloudaddons_getmd5($addonid);
@@ -302,9 +310,9 @@ function cloudaddons_copytree($from, $to) {
 					$writefile = preg_replace('/\._addons_$/', '', $writefile);
 					siteftp_upload($readfile, preg_replace('/^'.preg_quote(DISCUZ_ROOT).'/', '', $writefile));
 				}
-				if(md5_file($readfile) != md5_file($writefile)) {
+				/*if(md5_file($readfile) != md5_file($writefile)) {
 					cpmsg('cloudaddons_file_write_error', '', 'error');
-				}
+				}*/
 			} else {
 				cloudaddons_copytree($readfile, $writefile);
 			}

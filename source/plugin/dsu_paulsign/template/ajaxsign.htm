@@ -1,0 +1,79 @@
+{template common/header_ajax}
+<h3 class="flb">
+	<em>{lang dsu_paulsign:ajax_01}</em>
+	<!--{if !$var['ftopen'] || ($var['ftopen'] && !in_array($_G['groupid'], unserialize($var['groups'])) || in_array($_G['uid'],explode(",",$var['ban'])) ) }-->
+		<span><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']');" title="{lang close}">{lang close}</a></span>
+	<!--{/if}-->
+</h3>
+<form id="qiandao" method="post" action="plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=1&sign_as=1" onkeydown="if(event.keyCode==13){showWindow('qwindow', 'qiandao', 'post', '0');return false}">
+<div class="f_c" style="width:690px;margin:10px;">
+	<!--{if $qiandaodb['time'] < $tdtime}-->
+		<style>
+		.qdsmilea{padding:3px;margin:auto;float:left;list-style:none;float:left}
+		.qdsmilea li{float: left;padding:5px .4em;border:2px #fff solid;}
+		.qdsmilea li img{margin-bottom:5px;}
+		.qdsmilea li:hover{cursor:pointer;}
+		</style>
+		<h3>{lang dsu_paulsign:mb_xz}<!--{if $var['ftopen']}--><br><font color="red">[{lang dsu_paulsign:mb_xz1}]</font><!--{/if}--></h3>
+		<input type="hidden" name="formhash" value="{FORMHASH}">
+		<script>
+		function Icon_selected(sId) {
+			var oImg = document.getElementsByTagName('li');
+			for (var i = 0; i < oImg.length; i++) {
+			  if (oImg[i].id == sId) {
+				var selectname = document.getElementById(oImg[i].id + "_s");
+				selectname.checked = true;
+				oImg[i].style. background = '#EFEFEF';
+			  } else {
+				oImg[i].style. background = '';
+			  }
+			}
+		}
+		</script>
+		<table width="100%" cellpadding="0" cellspacing="0" align="center">
+		<tr>
+			<td>
+				<ul class="qdsmilea">
+					<!--{loop $emots $key $value}-->
+						<input id="{$key}_s" type="radio" name="qdxq" value="{$key}" style="display:none"><li id="{$key}" onclick="Icon_selected(this.id)"><center><img src="source/plugin/dsu_paulsign/img/emot/{$key}.gif"><br>{$value['name']}<br></center></li>
+					<!--{/loop}-->
+				</ul>
+			</td>
+		</tr>
+		<!--{if !$var['sayclose']}-->
+			<table summary="Qd" cellspacing="0" cellpadding="0" class="tfm">
+				<tr{if !$var['ksopen'] && !$var['todaysayxt']} style="display:none;"{/if}>
+					<th>{lang dsu_paulsign:mb_mode1}</th>
+					<td>
+					<label><input type="radio" name="qdmode" value="1" checked="checked" onclick="if(checked == true){document.getElementById('mode1').style.display='';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:mb_mode2}</label>&nbsp;&nbsp;
+					<!--{if $var['ksopen']}--><label><input type="radio" name="qdmode" value="2" onclick="if(checked == true){document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='';}">&nbsp;{lang dsu_paulsign:mb_mode3}</label>&nbsp;&nbsp;<!--{/if}-->
+					<!--{if $var['todaysayxt']}--><label><input type="radio" name="qdmode" value="3" onclick="if(checked){document.getElementById('mode1').style.display='none';document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:noq}</label><!--{/if}-->
+					</td>
+				</tr>
+				<tr id="mode1" style="display:;">
+					<th><label for="todaysay">{lang dsu_paulsign:mb_zxs}</label></th>
+					<td><input type="text" name="todaysay" id="todaysay" size="25" class="px" /></td>
+					<td></td>
+				</tr>
+				<tr id="mode2" style="display:none;">
+					<th>{lang dsu_paulsign:mb_fastreply}</th>
+					<td>
+						<select name="fastreply">
+						<!--{loop $fastreplytexts $key $value}-->
+							<option value="{$key}" style="color:#{eval echo dechex(rand(0, 255)).dechex(rand(0,196)).dechex(rand(0,255));}">{$value}</option>
+						<!--{/loop}-->
+						</select>
+					</td>
+				</tr>
+			</table>
+		<!--{/if}-->
+	</table>
+	<!--{else}-->
+		<h1 class="mt">{lang dsu_paulsign:mb_jryqe}</h1>
+	<!--{/if}-->
+</div>
+<p class="o pns">
+	<button type="button" class="pn pnc" onclick="showWindow('qwindow', 'qiandao', 'post', '0');return false"><strong>{lang dsu_paulsign:encore_02}</strong></button>
+</p>
+</form>
+{template common/footer_ajax}

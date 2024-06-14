@@ -46,18 +46,7 @@ if(submitcheck('notesubmit', 1)) {
 	}
 }
 
-require_once libfile('function/cloudaddons');
-$newversion = (CHARSET == 'utf-8') ? dunserialize($_G['setting']['cloudaddons_newversion']) : json_decode($_G['setting']['cloudaddons_newversion'], true);
-if(empty($newversion['newversion']) || !is_array($newversion['newversion']) || abs($_G['timestamp'] - $newversion['updatetime']) > 86400 || (isset($_GET['checknewversion']) && $_G['formhash'] == $_GET['formhash'])) {
-	$newversion = json_decode(cloudaddons_open('&mod=app&ac=upgrade'), true);
-	if(!empty($newversion['newversion'])) {
-		$newversion['updatetime'] = $_G['timestamp'];
-		C::t('common_setting')->update_setting('cloudaddons_newversion', ((CHARSET == 'utf-8') ? $newversion : json_encode($newversion)));
-		updatecache('setting');
-	} else {
-		$newversion = array();
-	}
-}
+$newversion = array();
 
 $reldisp = is_numeric(DISCUZ_RELEASE) ? ('Release '.DISCUZ_RELEASE) : DISCUZ_RELEASE;
 
@@ -98,8 +87,8 @@ echo '</div>';
 $now = date('Y');
 echo <<<EOT
 <div class="copyright">
-<p>Powered by <a href="https://www.discuz.vip/" target="_blank" class="lightlink2">Discuz!</a> {$_G['setting']['version']}</p>
-<p>&copy; 2001-$now <a href="https://code.dismall.com/" target="_blank">Discuz! Team</a>.</p>
+<p>Powered by <a href="https://www.discuz.vip/" target="_blank" class="lightlink2" rel="noreferrer">Discuz!</a> {$_G['setting']['version']}</p>
+<p>&copy; 2001-$now <a href="https://code.dismall.com/" target="_blank" rel="noreferrer">Discuz! Team</a>.</p>
 </div>
 EOT;
 
@@ -235,14 +224,7 @@ function show_releasetips() {
 		C::t('common_setting')->update('siterelease', $releasehash);
 		C::t('common_setting')->update('sitereleasetips', 1);
 		$sitereleasetips = 1;
-		require_once libfile('function/cloudaddons');
-		$newversion = json_decode(cloudaddons_open('&mod=app&ac=upgrade'), true);
-		if(!empty($newversion['newversion'])) {
-			$newversion['updatetime'] = $_G['timestamp'];
-			C::t('common_setting')->update_setting('cloudaddons_newversion', ((CHARSET == 'utf-8') ? $newversion : json_encode($newversion)));
-		} else {
-			$newversion = array();
-		}
+		$newversion = array();
 		require_once libfile('function/cache');
 		updatecache('setting');
 	}
@@ -379,9 +361,9 @@ function show_sysinfo() {
 
 	showboxrow('', array('class="dcol lineheight d-14"', 'class="dcol lineheight d-1"'), array(
 		cplang('home_check_newversion'),
-		($newversion['newversion']['release'] ? ($newversion['newversion']['release'] != DISCUZ_RELEASE ? '<b style="color:red;">' : '').'Discuz! '.$newversion['newversion']['version'].' '.$reldisp_addon.' '.strtoupper(CHARSET).' '.($newversion['newversion']['release'] != DISCUZ_RELEASE ? '</b>' : '') : '<a href="https://www.dismall.com/thread-73-1-1.html" target="_blank">'.cplang('detect_environment_error').'</a>').
+		($newversion['newversion']['release'] ? ($newversion['newversion']['release'] != DISCUZ_RELEASE ? '<b style="color:red;">' : '').'Discuz! '.$newversion['newversion']['version'].' '.$reldisp_addon.' '.strtoupper(CHARSET).' '.($newversion['newversion']['release'] != DISCUZ_RELEASE ? '</b>' : '') : '<a href="https://www.dismall.com/thread-73-1-1.html" target="_blank"  rel="noreferrer">'.cplang('detect_environment_error').'</a>').
 		' <a href="'.ADMINSCRIPT.'?action=index&checknewversion&formhash='.$_G['formhash'].'">[ '.cplang('refresh').' ]</a>&nbsp;&nbsp;<br><br>'.
-		(!empty($downlist) ? implode('&#x3001;', $downlist).($newversion['newversion']['qqqun'] ? '<span class="bold">&nbsp;&nbsp;|&nbsp;&nbsp;'.cplang('qq_group').$newversion['newversion']['qqqun'].'</span>' : '') : '<span class="bold"><a href="https://gitee.com/3dming/DiscuzL/attach_files" target="_blank">'.cplang('download_latest').'</a> | '.cplang('qq_group').'73'.'21'.'03'.'690</span>')
+		(!empty($downlist) ? implode('&#x3001;', $downlist) : '<span class="bold"><a href="https://gitee.com/3dming/DiscuzL/attach_files" target="_blank" rel="noreferrer">'.cplang('download_latest').'</a>')
 	));
 	showboxrow('', array('class="dcol lineheight d-14"', 'class="dcol lineheight d-1"'), array(
 		cplang('home_ucclient_version'),
@@ -442,11 +424,11 @@ function show_news() {
 		}
 	} else {
 		showboxrow('', array('class="dcol d-1"', 'class="dcol td21" style="text-align:right;"'), array(
-			'<a href="https://www.dismall.com/" target="_blank">'.cplang('log_in_to_update').'</a>',
+			'<a href="https://www.dismall.com/" target="_blank" rel="noreferrer">'.cplang('log_in_to_update').'</a>',
 			'',
 		));
 		showboxrow('', array('class="dcol d-1"', 'class="dcol td21" style="text-align:right;"'), array(
-			'<a href="https://gitee.com/3dming/DiscuzL/attach_files" target="_blank">'.cplang('download_latest').'</a>',
+			'<a href="https://gitee.com/3dming/DiscuzL/attach_files" target="_blank" rel="noreferrer">'.cplang('download_latest').'</a>',
 			'',
 		));
 	}
@@ -500,7 +482,7 @@ function show_forever_thanks() {
 		'ONEXIN' => 'ONEXIN',
 	);
 	foreach ($gitTeam as $id => $name) {
-		$gitTeamStr .= '<a href="https://gitee.com/'.$id.'" class="lightlink2 smallfont" target="_blank">'.$name.'</a>';
+		$gitTeamStr .= '<a href="https://gitee.com/'.$id.'" class="lightlink2 smallfont" target="_blank" rel="noreferrer">'.$name.'</a>';
 	}
 	$devTeamStr = '';
 	$devTeam = array(
@@ -518,7 +500,7 @@ function show_forever_thanks() {
 		'875919' => 'Jie \'tom115701\' Zhang',
 	);
 	foreach ($devTeam as $id => $name) {
-		$devTeamStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank">'.$name.'</a>';
+		$devTeamStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank" rel="noreferrer">'.$name.'</a>';
 	}
 	$devSkins = array(
 		'294092' => 'Fangming \'Lushnis\' Li',
@@ -527,7 +509,7 @@ function show_forever_thanks() {
 	);
 	$devSkinsStr = '';
 	foreach ($devSkins as $id => $name) {
-		$devSkinsStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank">'.$name.'</a>';
+		$devSkinsStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank" rel="noreferrer">'.$name.'</a>';
 	}
 	$devThanksStr = '';
 	$devThanks = array(
@@ -552,22 +534,22 @@ function show_forever_thanks() {
 		'7155' => 'Gregry',
 	);
 	foreach ($devThanks as $id => $name) {
-		$devThanksStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank">'.$name.'</a>';
+		$devThanksStr .= '<a href="https://discuz.dismall.com/home.php?mod=space&uid='.$id.'" class="lightlink2 smallfont" target="_blank" rel="noreferrer">'.$name.'</a>';
 	}
 
 	showboxheader('home_dev', 'fixpadding', 'id="home_dev"');
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array($copyRightMessage[0], '<span class="bold">'.$copyRightMessage[1].'</span>'));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array($copyRightMessage[2], '<span class="bold">'.$copyRightMessage[3].'</span>'));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('contributors'), $gitTeamStr));
-	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array('', '<a href="https://gitee.com/Discuz/DiscuzX/contributors" class="lightlink2" target="_blank">'.cplang('contributors_see').'</a>'));
-	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('home_dev_manager'), '<a href="https://discuz.dismall.com/home.php?mod=space&uid=1" class="lightlink2 smallfont" target="_blank">'.cplang('dev_manager').'</a>'));
+	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array('', '<a href="https://gitee.com/Discuz/DiscuzX/contributors" class="lightlink2" target="_blank" rel="noreferrer">'.cplang('contributors_see').'</a>'));
+	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('home_dev_manager'), '<a href="https://discuz.dismall.com/home.php?mod=space&uid=1" class="lightlink2 smallfont" target="_blank" rel="noreferrer">'.cplang('dev_manager').'</a>'));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('home_dev_team'), $devTeamStr));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('home_dev_skins'), $devSkinsStr));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team"'), array(cplang('home_dev_thanks'), $devThanksStr));
 	showboxrow('', array('class="dcol d-1 lineheight"', 'class="dcol lineheight team tm"'), array(cplang('home_dev_links'), '
-	<a href="https://code.dismall.com/" class="lightlink2" target="_blank">'.cplang('discuz_git').'</a>,&nbsp;
-	<a href="https://www.discuz.vip/" class="lightlink2" target="_blank">'.cplang('discussion_area').'</a>, &nbsp;
-	<a href="https://www.dismall.com/" class="lightlink2" target="_blank">'.cplang('app_discussion').'</a>,&nbsp;
+	<a href="https://code.dismall.com/" class="lightlink2" target="_blank" rel="noreferrer">'.cplang('discuz_git').'</a>,&nbsp;
+	<a href="https://www.discuz.vip/" class="lightlink2" target="_blank" rel="noreferrer">'.cplang('discussion_area').'</a>, &nbsp;
+	<a href="https://www.dismall.com/" class="lightlink2" target="_blank" rel="noreferrer">'.cplang('app_discussion').'</a>,&nbsp;
 	<a href="'.ADMINSCRIPT.'?action=cloudaddons" class="lightlink2" target="_blank">'.cplang('app_center').'</a>'));
 	showboxfooter();
 }

@@ -1,0 +1,284 @@
+{subtemplate common/header}
+<style> 
+.datalist { zoom: 1; }
+.datalist table { margin-bottom: 30px; width: 100%; border: 1px solid #E6E7E1; }
+.datalist th, .datalist td { padding: 4px 5px; border: 1px solid #E6E7E1; font-weight: 400; }
+.datalist th img { vertical-align: top; }
+.datalist table .stat_subject { border-right: none; }
+.datalist table .stat_num { padding-right: 15px; text-align: right; border-left: none; }
+.datalist .datatable { margin-bottom: 10px; }
+.datalist .datatable, .datalist .datatable th, .datalist .datatable td { border-width: 1px 0; text-align: left; }
+.datalist .fixtable { table-layout: fixed; }
+.colplural, .colplural th, .colplural td, th.highlight, td.highlight { background-color: #F5F5F5; }
+.qdsmile{padding:3px;margin:auto;float:left;list-style:none;float:left}
+.qdsmile li{float: left;padding:5px .4em;border:2px #fff solid;}
+.qdsmile li img{margin-bottom:5px;}
+.qdsmile li:hover{cursor:pointer;background:#F7FAFF;border:2px dashed #D1D8D8;}
+</style>
+<script type="text/javascript">
+function levelts(msg, script) {
+    script = !script ? '' : script;
+    var c = '<div class="f_c"><div class="c floatwrap" style="height: 370px">' + msg + '</div></div>';
+	var t = '{lang dsu_paulsign:lvmsg}' ;
+	showDialog(c, 'info', t);
+}
+function Icon_selected(sId) {
+    var oImg = document.getElementsByTagName('li');
+    for (var i = 0; i < oImg.length; i++) {
+      if (oImg[i].id == sId) {
+		var selectname = document.getElementById(oImg[i].id + "_s");
+        selectname.checked = true;
+        oImg[i].style. background = '#F7FAFF';
+		oImg[i].style. border = '2px dashed #D1D8D8';
+      } else {
+        oImg[i].style. background = '';
+		oImg[i].style. border = '';
+      }
+    }
+}
+</script>
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=dsu_paulsign:sign">{lang dsu_paulsign:name}</a>
+	</div> 
+</div>
+<div id="ct" class="ct2 wp cl">
+	<div class="mn">
+		<!--{if $qiandaodb['time'] < $tdtime && (!$var['timeopen'] || ($var['timeopen'] && ($htime >= $var['stime'] && $htime <= $var['ftime'])))}-->
+			<h3>{lang dsu_paulsign:mb_xz}<!--{if $var['ftopen']}--><br><font color="red">[{lang dsu_paulsign:mb_xz1}]</font><!--{/if}--></h3>
+			<div class="t">
+				<!--{if $var['qdajax']}-->
+					<form id="qiandao" method="post" action="plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=1" onkeydown="if(event.keyCode==13){showWindow('qwindow', 'qiandao', 'post', '0');return false}">
+				<!--{else}-->
+					<form name="qiandao" method="post" action="plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=0&inajax=0">
+				<!--{/if}-->
+				<input type="hidden" name="formhash" value="{FORMHASH}">
+				<table width="100%" cellpadding="0" cellspacing="0" align="center">
+					<tr>
+						<td class="tr3 tac">
+							<ul class="qdsmile">
+							<!--{loop $emots $key $value}-->
+								<input id="{$key}_s" type="radio" name="qdxq" value="{$key}" style="display:none"><li id="{$key}" onclick="Icon_selected(this.id)" onmouseover="showMenu({'ctrlid':this.id, 'pos':'21'});"><center><img src="source/plugin/dsu_paulsign/img/emot/{$key}.gif" /><br /></center></li>
+							<!--{/loop}-->
+							</ul>
+							<div style="padding:20px 0;"><!--{if $var['qdajax']}--><a href="javascript:;" onclick="showWindow('qwindow', 'qiandao', 'post', '0');return false"><img src="source/plugin/dsu_paulsign/img/qdtb.gif" width="100px" height="35px" /></a><!--{else}--><input type="submit" class="btn" value="" style="border:none;background:url(source/plugin/dsu_paulsign/img/qdtb.gif) left top no-repeat;width:100px; height:35px;"><!--{/if}--></div>
+						</td>
+					</tr>
+					<!--{loop $emots $key $value}-->
+						<div id="{$key}_menu" class="tip tip_4" style="display:none;width:50px;margin:0px 0px 0px 30px;"><div class="tip_horn"></div><div class="tip_c"><center>{$value['name']}</center></div></div>
+					<!--{/loop}-->
+					<!--{if !$var['sayclose']}-->
+						<table summary="Qd" cellspacing="0" cellpadding="0" class="tfm">
+							<tr{if !$var['ksopen'] && !$var['todaysayxt']} style="display:none;"{/if}>
+								<th>{lang dsu_paulsign:mb_mode1}</th>
+								<td>
+									<label><input type="radio" name="qdmode" value="1" checked="checked" onclick="if(checked == true){document.getElementById('mode1').style.display='';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:mb_mode2}</label>&nbsp;&nbsp;
+									<!--{if $var['ksopen']}--><label><input type="radio" name="qdmode" value="2" onclick="if(checked == true){document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='';}">&nbsp;{lang dsu_paulsign:mb_mode3}</label>&nbsp;&nbsp;<!--{/if}-->
+									<!--{if $var['todaysayxt']}--><label><input type="radio" name="qdmode" value="3" onclick="if(checked){document.getElementById('mode1').style.display='none';document.getElementById('mode2').style.display='none';}">&nbsp;{lang dsu_paulsign:noq}</label><!--{/if}-->
+								</td>
+							</tr>
+							<tr id="mode1" style="display:;">
+								<th><label for="todaysay">{lang dsu_paulsign:mb_zxs}</label></th>
+								<td><input type="text" name="todaysay" id="todaysay" size="25" class="px" /></td>
+								<td>{lang dsu_paulsign:mb_xzzs}</td>
+							</tr>
+							<tr id="mode2" style="display:none;">
+								<th>{lang dsu_paulsign:mb_fastreply}</th>
+								<td>
+									<select name="fastreply">
+									<!--{loop $fastreplytexts $key $value}-->
+										<option value="{$key}" style="color:#{eval echo dechex(rand(0, 255)).dechex(rand(0,196)).dechex(rand(0,255));}">{$value}</option>
+									<!--{/loop}-->
+									</select>
+								</td>
+							</tr>
+						</table>
+					<!--{/if}-->
+				</table>
+				</form>
+			</div>
+		<!--{else}-->
+			<h1 class="mt">{lang dsu_paulsign:mb_jryqe}</h1>
+			<!--{if $qiandaodb}-->
+				<p><font color="#FF0000"><b>$_G['username']</b></font> {lang dsu_paulsign:mb_fwt1} <b>$qiandaodb['days']</b> {lang dsu_paulsign:mb_fwt2}</p>
+				<p>{lang dsu_paulsign:mb_fwt3}<b>$qiandaodb['mdays']</b> {lang dsu_paulsign:mb_fwt2}</p>
+				<p>{lang dsu_paulsign:mb_fwt6}<font color="#ff00cc">$qtime</font> </p>
+				<p>{lang dsu_paulsign:mb_fwt8}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color="#ff00cc"><b>$qiandaodb['reward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}{lang dsu_paulsign:mb_fwt9}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color="#ff00cc"><b>$qiandaodb['lastreward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}.</p>
+				<p>{$q['level']}</p>
+			<!--{else}-->
+				<p>{lang dsu_paulsign:mb_fwt7}</p>
+			<!--{/if}-->
+		<!--{/if}-->
+		<h1 class="mt">{lang dsu_paulsign:mb_ph}</h1>
+		<ul class="tb cl">
+			<li {if $_GET['operation'] == ''}class="a"{/if}><a href="plugin.php?id=dsu_paulsign:sign">{lang dsu_paulsign:mb_scqd}</a></li>
+			<li {if $_GET['operation'] == 'zong' || $_GET['operation'] == 'month'}class="a"{/if} id="tspl" onmouseover="showMenu(this.id)"><a href="plugin.php?id=dsu_paulsign:sign&operation=zong" hidefocus="true" class="dropmenu">{lang dsu_paulsign:mb_tspl}</a></li>
+			<!--{if $var['plopen']}--><li {if $_GET['operation'] == 'zdyhz'}class="a"{/if} id="zdyhz" onmouseover="showMenu(this.id)"><a href="plugin.php?id=dsu_paulsign:sign&operation=zdyhz" hidefocus="true" class="dropmenu">{$var['xxkxsz']}</a></li><!--{/if}-->
+			<!--{if $var['rewardlistopen']}--><li {if $_GET['operation'] == 'rewardlist'}class="a"{/if}><a href="plugin.php?id=dsu_paulsign:sign&operation=rewardlist">{lang dsu_paulsign:mb_rewardlist}</a></li><!--{/if}-->
+			<li><a href="#" onclick="levelts('{lang dsu_paulsign:lvmsg1}', this.href);return false;">{lang dsu_paulsign:lvmsg}</a></li>
+		</ul>
+		<ul class="p_pop h_pop" id="tspl_menu" style="display: none">
+			<li><a href="plugin.php?id=dsu_paulsign:sign&operation=zong">{lang dsu_paulsign:mb_zts}</a></li>
+			<li><a href="plugin.php?id=dsu_paulsign:sign&operation=month">{lang dsu_paulsign:mb_yts}</a></li>
+		</ul>
+		<!--{if $var['plopen']}-->
+			<ul class="p_pop h_pop" id="zdyhz_menu" style="display: none">
+			<!--{loop $mccs $mcc}-->
+				<li><a href="plugin.php?id=dsu_paulsign:sign&operation=zdyhz&qdgroupid={$mcc[groupid]}">$mcc[grouptitle]</a></li>
+			<!--{/loop}-->
+			<li><a href="plugin.php?id=dsu_paulsign:sign&operation=zdyhz">{lang dsu_paulsign:xsqb}</a></li>
+			</ul>
+		<!--{/if}-->
+		<br>
+		<!--{if $_GET['operation'] == '' || $_GET['operation'] == 'month' || $_GET['operation'] == 'zong'|| ($_GET['operation'] == 'zdyhz' && $var['plopen'])}-->
+			<div class="datalist">
+				<table cellspacing="0" cellpadding="0" summary="phb" class="datatable">
+					<tr class="colplural">
+						<td width="1%"></td>
+						<td width="15%">{lang dsu_paulsign:mb_ph1}</td>
+						<td width="10%">{lang dsu_paulsign:mb_ph2}</td>
+						<td width="10%">{lang dsu_paulsign:mb_ph3}</td>
+						<td width="20%">{lang dsu_paulsign:mb_ph5}</td>
+						<td width="15%">{lang dsu_paulsign:mb_ph7}</td>
+						<td width="15%"><nobr>{lang dsu_paulsign:mb_lastreward}[{$_G[setting][extcredits][$var[nrcredit]][title]}]</nobr></td>
+						<td width="13%">{lang dsu_paulsign:mb_ph6}</td>
+					</tr>
+					<!--{if $mrcs}-->
+						<!--{loop $mrcs $mrc}-->
+							<tr>
+								<td></td>
+								<td><a href="home.php?mod=space&uid=$mrc[uid]" target="_blank">$mrc[username]</a></td>
+								<td>$mrc[days]</td>
+								<td>$mrc[mdays]</td>
+								<td>$mrc[time]</td>
+								<td>$mrc['level']</td>
+								<td>$mrc['lastreward'] {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}</td>
+								<td>$mrc['if']</td>
+							</tr>
+							<!--{if !$_G['cache']['plugin']['dsu_paulsign']['sayclose']}-->
+							<tr class="colplural">
+								<td align="left" colspan="9">
+									{lang dsu_paulsign:mb_zxs}: <img src="source/plugin/dsu_paulsign/img/emot/$mrc[qdxq].gif" /> $mrc[todaysay] <!--{if $_G['uid'] && $_G['adminid'] == 1}--><a href="plugin.php?id=dsu_paulsign:sign&operation=ban&banuid=$mrc[uid]&formhash={FORMHASH}"  title="{lang dsu_paulsign:ban_04}"><font color=red>[{lang dsu_paulsign:ban_05}]</font></a><!--{/if}-->
+								</td>
+							</tr>
+							<!--{/if}-->
+						<!--{/loop}-->
+						<!--{if !empty($multipage)}--><tr><td colspan="8"><div class="pages_btns">$multipage</div></td></tr><!--{/if}-->
+					<!--{else}-->
+						<tr><td colspan="9">{lang dsu_paulsign:mb_wrq}</td></tr>
+					<!--{/if}-->
+				</table>
+			</div>
+		<!--{elseif $_GET['operation'] == 'rewardlist' && $var['rewardlistopen']}-->
+			<div class="datalist">
+				<table cellspacing="0" cellpadding="0" summary="phb" class="datatable">
+					<tr class="colplural">
+						<th width="1%"></th>
+						<th width="20%">{lang dsu_paulsign:mb_ph1}</th>
+						<th width="15%">{lang dsu_paulsign:mb_ph2}</th>
+						<th width="15%">{lang dsu_paulsign:mb_ph3}</th>
+						<th width="19%">{lang dsu_paulsign:mb_ph7}</th>
+						<th width="15%"><nobr>{lang dsu_paulsign:mb_reward}[{$_G[setting][extcredits][$var[nrcredit]][title]}]</nobr></th>
+						<th width="15%"><nobr>{lang dsu_paulsign:mb_lastreward}[{$_G[setting][extcredits][$var[nrcredit]][title]}]</nobr></th>
+					</tr>
+					<!--{if $mrcs}-->
+						<!--{loop $mrcs $mrc}-->
+							<tr>
+								<td></td>
+								<td><a href="home.php?mod=space&uid=$mrc[uid]" target="_blank">$mrc[username]</a></td>
+								<td>$mrc[days]</td>
+								<td>$mrc[mdays]</td>
+								<td>$mrc['level']</td>
+								<td>$mrc['reward'] {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}</td>
+								<td>$mrc['lastreward'] {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<tr><td colspan="7">{lang dsu_paulsign:mb_wrq}</td></tr>
+					<!--{/if}-->
+				</table>
+			</div>
+		<!--{/if}-->
+		<!--{if $qiandaodb['time'] < $tdtime}-->
+			<div id="qdmsgt_c" class="umh">
+				<h3 onclick="toggle_collapse('qdmsgt', 1, 1);">{lang dsu_paulsign:mb_fwt}</h3>
+				<div class="umh_act">
+					<p class="umh_cb" onclick="toggle_collapse('qdmsgt', 1, 1);">{lang dsu_paulsign:mb_zk}</p>
+				</div>
+			</div>
+			<div class="um" id="qdmsgt" style="">
+				<!--{if $qiandaodb}-->
+					<p><font color="#FF0000"><b>$_G['username']</b></font> {lang dsu_paulsign:mb_fwt1} <b>$qiandaodb['days']</b> {lang dsu_paulsign:mb_fwt2}<!--{if $var['lastedop']}-->{lang dsu_paulsign:mb_fwt10} <b>$qiandaodb['lasted']</b> {lang dsu_paulsign:mb_fwt2}<!--{/if}--></p>
+					<p>{lang dsu_paulsign:mb_fwt3}<b>$qiandaodb['mdays']</b> {lang dsu_paulsign:mb_fwt2}</p>
+					<p>{lang dsu_paulsign:mb_fwt4}$q['if']{lang dsu_paulsign:mb_fwt5}</p>
+					<p>{lang dsu_paulsign:mb_fwt6}<font color="#ff00cc">$qtime</font> </p>
+					<p>{lang dsu_paulsign:mb_fwt8}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color="#ff00cc"><b>$qiandaodb['reward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}{lang dsu_paulsign:mb_fwt9}{$_G[setting][extcredits][$var[nrcredit]][title]} <font color="#ff00cc"><b>$qiandaodb['lastreward']</b></font> {$_G['setting']['extcredits'][$var[nrcredit]]['unit']}.</p>
+					<p>{$q['level']}</p>
+				<!--{else}-->
+					<p>{lang dsu_paulsign:mb_fwt7}</p>
+				<!--{/if}-->
+			</div>
+		<!--{/if}-->
+	</div>
+	<div class="sd">
+		<div class="bm">
+			<div class="bm_h cl">
+				<h2>{lang dsu_paulsign:mb_gg}</h2>
+			</div>
+			<div class="bm_c">
+				<ul class="xl">
+					<li>{$var[notice]}</li>
+				</ul>
+			</div>
+		</div>
+		<!--{if $var['timeopen']}-->
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>{lang dsu_paulsign:mb_tips}</h2>
+				</div>
+				<div class="bm_c">
+					<ul class="xl">
+						<li>{lang dsu_paulsign:mb_tips1}{$var[stime]}{lang dsu_paulsign:mb_tips2}{$var[ftime]}{lang dsu_paulsign:mb_tips3}</li>
+					</ul>
+				</div>
+			</div>
+		<!--{/if}-->
+		<!--{if $var['tjopen']}-->
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>{lang dsu_paulsign:tj_06}</h2>
+				</div>
+				<div class="bm_c">
+					<ul class="xl">
+						<!--{loop $emottops $emottop}-->
+							<li><span class="y xi2 xg1">$emottop[count] {lang dsu_paulsign:tj_03}</span>$emottop[name]</li>
+						<!--{/loop}-->
+					</ul>
+				</div>
+			</div>
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>{lang dsu_paulsign:tj_01}</h2>
+				</div>
+				<div class="bm_c">
+					<ul class="xl">
+						<li><span class="y xi2 xg1">$stats[todayq] {lang dsu_paulsign:tj_03}</span>{lang dsu_paulsign:tj_04}</li>
+						<li><span class="y xi2 xg1">$stats[yesterdayq] {lang dsu_paulsign:tj_03}</span>{lang dsu_paulsign:tj_05}</li>
+						<li><span class="y xi2 xg1">$stats[highestq] {lang dsu_paulsign:tj_03}</span>{lang dsu_paulsign:tj_02}</li>
+					</ul>
+				</div>
+			</div>
+		<!--{/if}-->
+		<div class="bm">
+			<div class="bm_h cl">
+				<h2>{lang dsu_paulsign:mb_ver}</h2>
+			</div>
+			<div class="bm_c">
+				<ul class="xl">
+					<li><a href="{$signadd}" title="{lang dsu_paulsign:mb_verxq}" target="_blank"><span style="font: bold 14px Arial; color: #fbb040;">{lang dsu_paulsign:mb_rayst}</span><span style="font: bold 15px Verdana; color: #f15a29;">{lang dsu_paulsign:name}</span></a><span style="font: normal 9px Verdana; display:block;"> $signBuild</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{subtemplate common/footer}

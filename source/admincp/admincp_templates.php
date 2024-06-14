@@ -31,7 +31,6 @@ if($operation == 'admin') {
 			$templates .= showtablerow('', array('class="td25"', '', 'class="td29"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" ".($tpl['templateid'] == 1 ? 'disabled ' : '')."value=\"{$tpl['templateid']}\">",
 				"<input type=\"text\" class=\"txt\" size=\"8\" name=\"namenew[{$tpl['templateid']}]\" value=\"{$tpl['name']}\">".
-				($basedir != 'default' ? '<a href="'.ADMINSCRIPT.'?action=cloudaddons&frame=no&id='.urlencode($basedir).'.template" target="_blank" title="'.$lang['cloudaddons_linkto'].'">'.$lang['view'].'</a>' : ''),
 				"<input type=\"text\" class=\"txt\" size=\"20\" name=\"directorynew[{$tpl['templateid']}]\" value=\"{$tpl['directory']}\">",
 				!empty($tpl['copyright']) ?
 					$tpl['copyright'] :
@@ -43,7 +42,6 @@ if($operation == 'admin') {
 		showsubmenu('styles_admin', array(
 			array('templates_add', 'templates&operation=add', 0),
 			array('nav_templates', 'templates&operation=admin', 1),
-			array('cloudaddons_style_link', 'cloudaddons&frame=no&operation=templates&from=more', 0, 1),
 		));
 		showformheader('templates');
 		showtableheader();
@@ -156,7 +154,6 @@ if($operation == 'admin') {
 		showsubmenu('styles_admin', array(
 			array('templates_add', 'templates&operation=add', 1),
 			array('nav_templates', 'templates&operation=admin', 0),
-			array('cloudaddons_style_link', 'cloudaddons&frame=no&operation=templates&from=more', 0, 1),
 		));
 		showtips('templates_add_tips');
 
