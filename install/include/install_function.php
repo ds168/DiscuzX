@@ -482,6 +482,7 @@ function dunserialize($data) {
 }
 
 function cloudaddons_getversion($instid) {
+	return array('is_latest' => 1, 'url' => '');
 	$timestamp = time();
 	$data = 'product=discuzx&sitever='.DISCUZ_VERSION.'/'.DISCUZ_RELEASE.'&sitecharset='.CHARSET.'&addonversion=1&os='.PHP_OS .'&php='.PHP_VERSION.'&web='.$_SERVER['SERVER_SOFTWARE'].'&lang='.INSTALL_LANG.'&type=installer&instid='.$instid;
 	$param = 'data='.rawurlencode(base64_encode($data));
